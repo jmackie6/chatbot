@@ -47,6 +47,9 @@ namespace Chatbot
 
             answer.Text = getAiResponse.answer;
             //error.Text = getAiResponse.error;
+
+
+
            
         }
 
