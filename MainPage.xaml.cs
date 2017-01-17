@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Newtonsoft.Json;
+using ApiAiSDK;
+using ApiAiSDK.Model;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -36,22 +38,24 @@ namespace Chatbot
         public MainPage()
         {
             this.InitializeComponent();
+
         }
 
-        private void send_Click(object sender, RoutedEventArgs e)
+        private  async void send_Click(object sender, RoutedEventArgs e)
         {
             
-            string question2 = error.Text;
-            //getAiResponse response = new getAiResponse();
-            getAiResponse.GetResponse(question.Text, question2);
-
+            string except = error.Text;
+            string temp2 = "";
+            getAiResponse response = new getAiResponse();
+            await getAiResponse.GetResponse(question.Text, except);
             answer.Text = getAiResponse.answer;
             //error.Text = getAiResponse.error;
 
-
-
-           
         }
 
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
