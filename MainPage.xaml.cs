@@ -35,27 +35,41 @@ namespace Chatbot
     public sealed partial class MainPage : Page
     {
 
+        //private static string clientAccessToken = "efeec4bb5e9f43fa836537751ca674d5";
+        //static AIService aiService;
+
         public MainPage()
         {
             this.InitializeComponent();
-
         }
 
         private  async void send_Click(object sender, RoutedEventArgs e)
         {
             
             string except = error.Text;
-            string temp2 = "";
-            getAiResponse response = new getAiResponse();
-            await getAiResponse.GetResponse(question.Text, except);
+
+            //getAiResponse response = new getAiResponse();
+            //try
+            //{
+            //    //var response = await aiService.StartRecognitionAsync();
+            //    var config = new AIConfiguration(clientAccessToken, SupportedLanguage.English);
+            //    aiService = AIService.CreateService(config);
+            //    await aiService.InitializeAsync();
+            //}
+            //catch (Exception exception)
+            //{
+            //    // Some exception processing
+            //}
+
+            //await getAiResponse.GetResponse(question.Text, aiService);
+            //await .StartRecognitionAsync();
+
+            await getAiResponse.GetResponse(question.Text);
+
             answer.Text = getAiResponse.answer;
+            //answer.Text = getAiResponse.startTime;
             //error.Text = getAiResponse.error;
-
         }
 
-        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }

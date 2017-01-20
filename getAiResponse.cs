@@ -14,16 +14,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ApiAiSDK;
 using ApiAiSDK.Model;
+using Google.Apis.Calendar.v3;
 
 namespace Chatbot
 {
     
-    //public class Json
-    //{
-    //    public static string answer { get; set; }
-    //    //public string result { get; set; }
-    //}
-
     public class getAiResponse
     {
         //private static string URL = "https://api.api.ai/v1/query";
@@ -31,17 +26,27 @@ namespace Chatbot
         //private static string language = "&lang=en";
         //private static string queryString = "&query=";
         //private string developerAccessToken = "204591ee637d4460a5179c06fc038c5a";
-        private static string clientAccessToken = "efeec4bb5e9f43fa836537751ca674d5";
-        private static int v = 20161128;
+        //private static int v = 20161128;
         //private static string sessionId = "&sessionId=d16c4966-d289-4b28-b916-8bb57f95024d";
-        public static string timestamp = "";
+        //public static string timestamp = "";
 
         public static string answer = "";
         public static string error = "";
-        //public static ApiAi apiAi;
-        public static AIService aiService;
 
-        public static async Task<string> GetResponse(string question, string temp2)
+        public static string startTime = "";
+        public static string endTime = "";
+        public static string title = "";
+        public static string date = "";
+        public static string[] parameters = new string[] { };
+        Dictionary<string, object> dObject = new Dictionary<string, object>();
+
+        //public static ApiAi apiAi;
+        private static string clientAccessToken = "efeec4bb5e9f43fa836537751ca674d5";
+        static AIService aiService;
+        
+        //public static async Task<string> GetResponse(string question, string startTime, string endTime, string title, string date,  string[] parameters, Dictionary<string, object> dObject)
+        //public static async Task<string> GetResponse(string question, AIService aiService)
+        public static async Task<string> GetResponse(string question)
         {
 
             try
@@ -49,42 +54,41 @@ namespace Chatbot
                 var config = new AIConfiguration(clientAccessToken, SupportedLanguage.English);
                 aiService = AIService.CreateService(config);
                 await aiService.InitializeAsync();
-                //await aiService.StartRecognitionAsync();
-                var response =  await aiService.TextRequestAsync(question);
-                answer = response.Result.Fulfillment.Speech;
 
+                
+                
+                //foreach (var i in response.Result.Parameters)
+                //{
+                //    if (i.Key == "startTime")
+                //    {
+                //        startTime = i.Value.ToString();
+                //    }
+                //    else if (i.Key == "endTime")
+                //    {
+                //        endTime = i.Value.ToString();
+                //    }
+                //    else if (i.Key == "date")
+                //    {
+                //        date = i.Value.ToString();
+                //    }
+                //    else if (i.Key == "title")
+                //    {
+                //        title = i.Value.ToString();
+                //    }
+                //}
+                //aiService.StartRecognitionAsync();
+                //await aiService.StartRecognitionAsync();
             }
             catch (Exception e)
             {
                 error = "error"; // Some exception processing
             }
 
+            var response = await aiService.TextRequestAsync(question);
+            //answer = response.Result.Fulfillment.Speech;
+            //response = await aiService.StartRecognitionAsync();
+            answer = response.Result.Fulfillment.Speech;
             return answer;
-            //HttpClient client = new HttpClient();
-
-            //client.BaseAddress = new Uri(URL);
-
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientAccessToken);
-
-            //urlParameters += "?v=" + v + queryString + question + language + sessionId;
-            //HttpResponseMessage response = client.GetAsync(urlParameters).Result;
-
-            //string responseBody = await response.Content.ReadAsStringAsync();
-
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    dynamic json = JObject.Parse(responseBody);
-            //    timestamp = stuff.timestamp;
-            //    answer = json.result.fulfillment.speech;
-
-            //    answer = "we called the api";
-            //}
-            //else
-            //{
-            //    answer = response.StatusCode.ToString();
-            //    error = response.ReasonPhrase;
-            //    error = urlParameters;
-            //}
         }
         
     }

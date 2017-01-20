@@ -9,11 +9,11 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Button x:Name="send" Content="Send" HorizontalAlignment="Left" Margin="220,354,0,0" VerticalAlignment="Top" Click="send_Click"/>
-        <TextBox x:Name="question" HorizontalAlignment="Left" Margin="45,354,0,0" TextWrapping="Wrap" Text="ask your questions" VerticalAlignment="Top" Width="170"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="97,295,0,0" TextWrapping="Wrap" Text="Lets talk to the eventbot" VerticalAlignment="Top" Width="209"/>
-        <TextBlock x:Name="answer" HorizontalAlignment="Left" Margin="10,430,0,0" TextWrapping="Wrap" Text="answer" VerticalAlignment="Top" Width="340" Height="97"/>
-        <TextBlock x:Name="error" HorizontalAlignment="Left" Margin="10,532,0,0" TextWrapping="Wrap" Text="error" VerticalAlignment="Top" Width="340" Height="98"/>
+        <Button x:Name="send" Content="Send" HorizontalAlignment="Left" Margin="217,552,0,0" VerticalAlignment="Top" Click="send_Click"/>
+        <TextBox x:Name="question" HorizontalAlignment="Left" Margin="42,552,0,0" TextWrapping="Wrap" Text="ask your questions" VerticalAlignment="Top" Width="170"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="61,527,0,0" TextWrapping="Wrap" Text="Lets talk to the event chatbot" VerticalAlignment="Top" Width="209"/>
+        <TextBlock x:Name="answer" HorizontalAlignment="Left" Margin="10,398,0,0" TextWrapping="Wrap" Text="answer" VerticalAlignment="Top" Width="340" Height="97"/>
+        <TextBlock x:Name="error" HorizontalAlignment="Left" Margin="153,320,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>
