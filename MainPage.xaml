@@ -12,8 +12,14 @@
         <Button x:Name="send" Content="Send" HorizontalAlignment="Left" Margin="217,552,0,0" VerticalAlignment="Top" Click="send_Click"/>
         <TextBox x:Name="question" HorizontalAlignment="Left" Margin="42,552,0,0" TextWrapping="Wrap" Text="ask your questions" VerticalAlignment="Top" Width="170"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="61,527,0,0" TextWrapping="Wrap" Text="Lets talk to the event chatbot" VerticalAlignment="Top" Width="209"/>
-        <TextBlock x:Name="answer" HorizontalAlignment="Left" Margin="10,398,0,0" TextWrapping="Wrap" Text="answer" VerticalAlignment="Top" Width="340" Height="97"/>
-        <TextBlock x:Name="error" HorizontalAlignment="Left" Margin="153,320,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <TextBlock x:Name="answer" HorizontalAlignment="Left" Margin="10,202,0,0" TextWrapping="Wrap" Text="answer" VerticalAlignment="Top" Width="340" Height="56"/>
+        <TextBlock x:Name="date" HorizontalAlignment="Left" Margin="10,434,0,0" TextWrapping="Wrap" Text="date" VerticalAlignment="Top" Width="340"/>
+        <TextBlock x:Name="startTime" HorizontalAlignment="Left" Margin="8,378,0,0" TextWrapping="Wrap" Text="StartTime" VerticalAlignment="Top" Width="262"/>
+
+        <TextBlock x:Name="error" HorizontalAlignment="Left" Margin="10,319,0,0" TextWrapping="Wrap" Text="Error Message" VerticalAlignment="Top" Width="340"/>
+        <TextBlock x:Name="title" HorizontalAlignment="Left" Margin="10,459,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="340"/>
+        <TextBlock x:Name="endTime" HorizontalAlignment="Left" Margin="8,403,0,0" TextWrapping="Wrap" Text="endTime" VerticalAlignment="Top" Width="262"/>
+        <TextBlock x:Name="appoint" HorizontalAlignment="Left" Margin="10,344,0,0" TextWrapping="Wrap" Text="appointment" VerticalAlignment="Top" Width="340"/>
 
     </Grid>
 </Page>
