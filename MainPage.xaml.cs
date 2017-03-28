@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,123 +13,262 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Newtonsoft.Json;
-using ApiAiSDK;
-using ApiAiSDK.Model;
+
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
+
+
+using System.Text;
 using System.Threading.Tasks;
 using Firebase.Database;
 using Firebase.Database.Query;
 
+using Newtonsoft.Json;
+using CalendarBot;
+using Newtonsoft.Json.Linq;
+using Windows.UI;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Chatbot
+namespace CalendarBot
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    /// 
-
+    
     public sealed partial class MainPage : Page
     {
-
-        //private static string clientAccessToken = "efeec4bb5e9f43fa836537751ca674d5";
+       
+        public static bool accessPage = false;
+        public static string log = "";
+        public static string passy = "";
         
-        //config = new AIConfiguration(clientAccessToken, SupportedLanguage.English);
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        private  async void send_Click(object sender, RoutedEventArgs e)
+        private void logout_Click(object sender, RoutedEventArgs e)
         {
-
-
-            //getAiResponse response = new getAiResponse();
-            //try
-            //{
-            //    //var response = await aiService.StartRecognitionAsync();
-            //    var config = new AIConfiguration(clientAccessToken, SupportedLanguage.English);
-            //    aiService = AIService.CreateService(config);
-            //    await aiService.InitializeAsync();
-            //}
-            //catch (Exception exception)
-            //{
-            //    // Some exception processing
-            //}
-
-            //var firebase = new Firebase.Database.FirebaseClient("https://calendarbot-2573c.firebaseio.com/");
-
-            //// add new item to list of data and let the client generate new key for you (done offline)
-            //var dino = await firebase
-            //    .Child("question")
-            //    .Child("timestamp")
-            //    .PostAsync(question.Text);
-
-            await getAiResponse.GetResponse(question.Text);
-
-            answer.Text = getAiResponse.answer;
-            startTime.Text = getAiResponse.startTime;
-            endTime.Text = getAiResponse.endTime;
-            title.Text = getAiResponse.title;
-            date.Text = getAiResponse.date;
-
-            appoint.Text = getAiResponse.appoint;
-            question.Text = "";
-
             
-            //var appointment = new Windows.ApplicationModel.Appointments.Appointment();
-            ////error.Text = DateTime.Now.ToString();
-            //string dateTime = getAiResponse.date + " " + getAiResponse.startTime;
-            ////appointment.StartTime = dateTime + TimeSpan.FromDays(1);
-            //DateTime myDate = DateTime.ParseExact(dateTime, "yyyy-MM-dd HH:mm:ss",
-            //                           System.Globalization.CultureInfo.InvariantCulture) + TimeSpan.FromDays(1);
-            //appointment.StartTime = myDate;
-            ////error.Text = appointment.StartTime.ToString();
-            ////error.Text = dateTime;
-            //if (getAiResponse.endTime != "")
-            //{
-            //    int start = 1;
-            //    int end = 0;
-            //    int duration = start - end;
-            //    appointment.Duration = TimeSpan.FromHours(duration);
-            //}
-            //else
-            //    appointment.Duration = TimeSpan.FromHours(1);
+            accessPage = false;
+            log = "";
+            passy = "";
 
-            //appointment.Subject = getAiResponse.title;
-
-            //appointment.Reminder = TimeSpan.FromMinutes(20); // Remind me 15 minutes prior
-            //                                                 // ShowAddAppointmentAsync returns an appointment id if the appointment given was added to the user' s calendar.
-            //                                                 // This value should be stored in app data and roamed so that the appointment can be replaced or removed in the future.
-            //                                                 // An empty string return value indicates that the user canceled the operation before the appointment was added.
-            ////String appointmentId =
-            ////    await Windows.ApplicationModel.Appointments.AppointmentManager.ShowEditNewAppointmentAsync(appointment);
-            ////if (appointmentId != String.Empty)
-            ////{
-            ////    appoint.Text = "Appointment Id: " + appointmentId;
-            ////}
-            ////else
-            ////{
-            ////    appoint.Text = "Appointment not added.";
-            ////}
-
-            //try
-            //{
-            //    var response = await aiService.StartRecognitionAsync();
-            //    //answer.Text = getAiResponse.answer;
-            //}
-            //catch (Exception exception)
-            //{
-            //    // Some exception processing
-            //}
-
-            //await getAiResponse.GetResponse(question.Text);
-
-
-            //answer.Text = getAiResponse.startTime;
-            //error.Text = getAiResponse.error;
+            MyFrame.Navigate(typeof(loginPage));
         }
 
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            
+            if (accessPage != true)
+            {
+                MyFrame.Navigate(typeof(loginPage));
+            }
+            string temp = log;
+            if (log != "")
+            {
+                login.Text = "Windows Calendar Bot" + temp;
+                displayAnswers();
+            }
+            
+        }
+
+        private async void displayAnswers()
+        {
+
+            string urlParameters = "https://calendarbot-2573c.firebaseio.com/users/" + log + "/history.json";
+            
+            HttpClient client2 = new HttpClient();
+
+            HttpResponseMessage response = client2.GetAsync(urlParameters).Result;
+            
+            string responseBody = await response.Content.ReadAsStringAsync();
+            
+            if (responseBody == "null")
+            {
+                //TextBlock texxy = new TextBlock()
+                //{
+                //    Text = "This is the start of your conversation",
+                //    TextAlignment = TextAlignment.Left,
+                //    Foreground = new SolidColorBrush(Colors.White)
+                //};
+
+                //Grid griddy = new Grid()
+                //{
+                //    Background = new SolidColorBrush(Colors.Aqua)
+                //};
+
+                //griddy.Children.Add(texxy);
+                
+                //ansAndQues.Children.Add(griddy);
+
+                ansAndQues.Children.Add(new TextBlock()
+                {
+                    Text = "This is the start of your conversation\n with the windows calendar bot ",
+                    TextAlignment = TextAlignment.Left,
+                    Foreground = new SolidColorBrush(Colors.Black)
+                });
+
+                
+            }
+            else
+            {
+                if (response.IsSuccessStatusCode)
+                {
+
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseBody);
+                    int count = 0;
+                    foreach (var answ in dict)
+                    {
+                        
+                        string answerValue = answ.Value;
+                        
+                        if(count % 2 == 0)
+                        {
+                            //TextBlock texxy = new TextBlock()
+                            //{
+                            //    Text = answerValue,
+                            //    TextAlignment = TextAlignment.Left,
+                            //    Foreground = new SolidColorBrush(Colors.Black)
+                            //};
+
+                            //Grid griddy = new Grid()
+                            //{
+                            //    Background = new SolidColorBrush(Colors.Aquamarine)
+                            //};
+
+                            //griddy.Children.Add(texxy);
+
+                            //ansAndQues.Children.Add(griddy);
+                            ansAndQues.Children.Add(new TextBlock()
+                            {
+                                Text = answerValue,
+                                TextAlignment = TextAlignment.Left,
+                                Foreground = new SolidColorBrush(Colors.Gray)
+                            });
+
+                            scroll.UpdateLayout();
+                            scroll.ChangeView(0.0f, double.MaxValue, 1.0f);
+                        }
+                        else
+                        {
+                            //TextBlock texxy = new TextBlock()
+                            //{
+                            //    Text = answerValue,
+                            //    TextAlignment = TextAlignment.Right,
+                            //    Foreground = new SolidColorBrush(Colors.Black)
+                            //};
+
+                            //Grid griddy = new Grid()
+                            //{
+                            //    Background = new SolidColorBrush(Colors.Gray)
+                            //};
+
+                            //griddy.Children.Add(texxy);
+
+                            //ansAndQues.Children.Add(griddy);
+
+                            ansAndQues.Children.Add(new TextBlock()
+                            {
+                                Text = answerValue,
+                                TextAlignment = TextAlignment.Right,
+                                Foreground = new SolidColorBrush(Colors.Black)
+                            });
+
+                            scroll.UpdateLayout();
+                            scroll.ChangeView(0.0f, double.MaxValue, 1.0f);
+
+                        }
+                        count++;
+                    }
+                }
+            }
+            
+        }
+
+        private async void send_Click(object sender, RoutedEventArgs e)
+        {
+
+            string parameter = string.Empty;
+            
+            
+            var firebase = new Firebase.Database.FirebaseClient("https://calendarbot-2573c.firebaseio.com/");
+            
+            // add new item to list of data and let the client generate new key for you (done offline)
+            var ques = await firebase
+                .Child("users")
+                .Child(log)
+                .Child("questions")
+                .PostAsync(question.Text);
+
+
+            string que = question.Text;
+
+            question.Text += "\n";
+            ansAndQues.Children.Add(new TextBlock() { Text = question.Text,
+                TextAlignment = TextAlignment.Right, 
+                Foreground = new SolidColorBrush(Colors.Black)});
+
+            //TextTrimming.WordEllipsis = 5 , TextWrapping.Wrap = 4,
+            //    Width = 200,
+
+            scroll.UpdateLayout();
+            scroll.ChangeView(0.0f, double.MaxValue, 1.0f);
+
+            var histQ = await firebase
+                .Child("users")
+                .Child(log)
+                .Child("history")
+                .PostAsync(question.Text);
+
+            await AiResponse.GetResponse(question.Text);
+
+            answer.Text = AiResponse.answer;
+
+            var ans = await firebase
+                .Child("users")
+                .Child(log)
+                .Child("answers")
+                .PostAsync(answer.Text);
+
+            answer.Text += "\n";
+            ansAndQues.Children.Add(new TextBlock() { Text = answer.Text, TextAlignment = TextAlignment.Left, Foreground = new SolidColorBrush(Colors.Gray) });
+
+            scroll.UpdateLayout();
+            scroll.ChangeView(0.0f, double.MaxValue, 1.0f);
+
+            var histA = await firebase
+                .Child("users")
+                .Child(log)
+                .Child("history")
+                .PostAsync(answer.Text);
+
+            //startTime.Text = AiResponse.startTime;
+            //endTime.Text = AiResponse.endTime;
+            login.Text = "Welcome " + log;
+            
+            question.Text = "";
+
+        }
+
+        private void send_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            //if (e.Key == )
+            //{
+            //    button.PerformClick();
+            //    // these last two lines will stop the beep sound
+            //    e.SuppressKeyPress = true;
+            //    e.Handled = true;
+            //}
+        }
+    }
+    internal class Answers
+    {
+        public string answers { get; set; }
     }
 }
